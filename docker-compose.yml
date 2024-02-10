@@ -1,0 +1,25 @@
+version: '3'
+services:
+  forwarder:
+    container_name: forwarder
+    restart: always
+    volumes:
+      - "$HOME/.kube/config:/root/.kube/config:ro"
+      - "haproxy:/app/haproxy:rw"
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+  haproxy:
+    container_name: haproxy
+    image: haproxy:latest
+    depends_on:
+      - forwarder
+    volumes:
+      - haproxy:/usr/local/etc/haproxy:ro
+    ports:
+      - "80:80"
+    command: /bin/bash -c "sleep 5 && haproxy -f /usr/local/etc/haproxy/haproxy.conf"
+
+volumes:
+  haproxy:

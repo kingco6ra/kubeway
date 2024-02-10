@@ -1,0 +1,9 @@
+KUBERNETES_NAMESPACE: "your namespace"
+SERVICES:
+  - name: your-service-name-in-kubernetes
+    forwardings:
+      - protocol: http
+        port: 8000
+      - protocol: grpc
+        port: 50051
+

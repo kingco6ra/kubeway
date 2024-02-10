@@ -1,0 +1,20 @@
+frontend http_front
+    bind *:80
+    mode http
+
+{% for path in paths %}
+    use_backend {{ path.backend }}-{{ path.protocol }} if { path /{{ path.backend }}/{{ path.protocol }} } || { path_beg /{{ path.backend }}/{{ path.protocol }}/ }
+{% endfor %}
+
+defaults
+    mode http
+    timeout connect {{ timeout_connect }}
+    timeout client {{ timeout_client }}
+    timeout server {{ timeout_server }}
+
+{% for backend in backends %}
+backend {{ backend.name }}-{{ backend.protocol }}
+    mode http
+    http-request replace-path /{{ backend.name }}/{{ backend.protocol }}(/)?(.*) /\\2
+    server host forwarder:{{ backend.port }} check {{ backend.proto_h2 }}
+{% endfor %}
