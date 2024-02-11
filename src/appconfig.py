@@ -1,16 +1,13 @@
-from dataclasses import dataclass, field
-
-import yaml
+from dataclasses import dataclass
 
 from models.services import Service
+from utils.file_io import read_yaml_file
 
 
 @dataclass
 class AppConfig:
-    KUBERNETES_NAMESPACE: str
     SERVICES: list[Service]
     CONFIG_PATH: str = "config.yaml"
-    REFORWARD_DELAY: int = 300
 
     PROXY_SERVER: str = "haproxy"
     TEMPLATES_PATH: str = "templates/"
@@ -23,8 +20,8 @@ class AppConfig:
 
     @classmethod
     def load_from_yaml(cls, file_path: str) -> "AppConfig":
-        with open(file_path, "r") as file:
-            data = yaml.safe_load(file)
+        data = read_yaml_file(file_path)
+        print(data)
         if "SERVICES" in data:
             data["SERVICES"] = [
                 Service.from_dict(service) for service in data["SERVICES"]

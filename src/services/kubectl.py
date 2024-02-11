@@ -2,13 +2,10 @@ import asyncio
 import logging
 from typing import Callable
 
-from appconfig import config
+from models.services import Service
 
 
 class Kubectl:
-    def __init__(self, namespace: str):
-        self.__namespace = namespace
-
     @staticmethod
     async def __output_callback(line: str, output: list):
         logging.info(line)
@@ -39,7 +36,7 @@ class Kubectl:
         await process.wait()
         return output
 
-    async def __get_pod_name(self, service: str) -> str:
+    async def __get_pod_name(self, namespace: str, service: str) -> str:
         command = [
             "kubectl",
             "get",
@@ -49,13 +46,14 @@ class Kubectl:
             "-o",
             "name",
             "-n",
-            self.__namespace,
+            namespace,
         ]
         output = await self.__execute_command(command)
         return output[0]
 
     async def __forward_port(
         self,
+        namespace: str,
         pod: str,
         local_port: int,
         remote_port: int,
@@ -66,24 +64,27 @@ class Kubectl:
             "--address",
             "0.0.0.0",
             "-n",
-            self.__namespace,
+            namespace,
             pod,
             f"{local_port}:{remote_port}",
         ]
         logging.info(f"Forward {pod} to {local_port}:{remote_port}")
         _ = await self.__execute_command(command)
 
-    async def forward_ports(self) -> None:
+    async def forward_ports(self, services: list[Service]) -> None:
         tasks = []
-        for service in config.SERVICES:
-            pod_name = await self.__get_pod_name(service.name)
-
-            for location in service.forwardings:
-                tasks.append(
-                    self.__forward_port(
-                        pod=pod_name,
-                        local_port=location.generated_port,
-                        remote_port=location.port,
-                    )
+        for service in services:
+            for namespace in service.namespaces:
+                pod_name = await self.__get_pod_name(namespace, service.name)
+                tasks.extend(
+                    [
+                        self.__forward_port(
+                            namespace=namespace,
+                            pod=pod_name,
+                            local_port=forwarding.local_port,
+                            remote_port=forwarding.remote_port,
+                        )
+                        for forwarding in service.forwardings
+                    ]
                 )
         await asyncio.gather(*tasks)

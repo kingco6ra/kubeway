@@ -1,13 +1,13 @@
+from typing import Any
+
 import yaml
 
-from models.services import Service
 
-
-def get_services_from_file(path: str) -> list[Service]:
+def read_yaml_file(path: str) -> dict[str, Any]:
     with open(path, "r") as data:
-        return [Service.from_dict(item) for item in yaml.safe_load(data)]
+        return yaml.safe_load(data)
 
 
-def write_configuration_file(path: str, configuration: str) -> None:
+def write_file(path: str, data: str) -> None:
     with open(path, "w") as file:
-        file.write(configuration)
+        file.write(data)

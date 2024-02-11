@@ -1,9 +1,16 @@
-KUBERNETES_NAMESPACE: "your namespace"
 SERVICES:
-  - name: your-service-name-in-kubernetes
+  - name: service-1
+    namespaces:
+      - namespace-1
     forwardings:
       - protocol: http
-        port: 8000
-      - protocol: grpc
-        port: 50051
+        remote_port: 8080
 
+  - name: service-2
+    namespaces:
+      - namespace-1
+      - namespace-2
+    forwardings:
+      - protocol: grpc
+        remote_port: 50051
+        # local_port: 50052  if you want set specific port for forwarding.
