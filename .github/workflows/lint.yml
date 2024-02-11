@@ -1,43 +1,45 @@
 name: Python Lint and Format
 
-on: [push, pull_request]
+on: [ push ]
 
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.TOKEN }}
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        pip install pylama mypy flake8 black
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylama mypy flake8 black
 
-    - name: Lint with Pylama
-      run: pylama .
+      - name: Lint with Pylama
+        run: pylama .
 
-    - name: Type check with Mypy
-      run: mypy .
+      - name: Type check with Mypy
+        run: mypy .
 
-    - name: Lint with Flake8
-      run: flake8 .
+      - name: Lint with Flake8
+        run: flake8 .
 
-    - name: Format with Black
-      run: |
-        black . --check || (black . && echo '##[set-output name=black_formatted;]true')
-      id: black_format
+      - name: Format with Black
+        run: |
+          black . --check || (black . && echo '##[set-output name=black_formatted;]true')
+        id: black_format
 
-    - name: Commit changes
-      if: steps.black_format.outputs.black_formatted == 'true'
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add .
-        git commit -m "Automatically formatted code with Black"
-        git push
+      - name: Git Auto Commit
+        if: steps.black_format.outputs.black_formatted == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5.0.0
+        with:
+          commit_message: Apply Black code reformat
