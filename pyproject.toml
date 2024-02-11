@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "kubectl-forwarding"
+name = "kubeway"
 version = "0.1.0"
 description = ""
 authors = ["Maxim Osipov <kingco6ra@yandex.ru>"]

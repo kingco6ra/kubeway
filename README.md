@@ -1,8 +1,8 @@
-# kubectl-forwarder
+# kubeway
 
 ## Overview
 
-Kubectl-Forwarder is a tool designed to automate and simplify the process of port forwarding for services running in
+**kubeway** is a tool designed to automate and simplify the process of port forwarding for services running in
 Kubernetes. It allows local access to services operating within a Kubernetes cluster through dynamically allocated ports
 on the local machine. The project includes integration with HAProxy for configuring a proxy server to route requests to
 services.
@@ -16,14 +16,14 @@ services.
 
 ## Quick Start Guide
 
-This quick start guide will walk you through the setup process of the Kubectl-Forwarder tool, from configuring your
+This quick start guide will walk you through the setup process of the **kubeway** tool, from configuring your
 services to running the tool using Docker Compose. This will enable you to access your Kubernetes services locally over
 specified ports.
 
 ### Step 1: Configure your services in `config.yaml`
 
 Before starting, you need to specify the names of your services, the required ports, and the Kubernetes namespace in
-the `config.yaml` file. This file dictates how the Kubectl-Forwarder will interact with your Kubernetes services.
+the `config.yaml` file. This file dictates how the **kubeway** will interact with your Kubernetes services.
 
 Example `config.yaml`:
 
@@ -51,8 +51,8 @@ names. Adjust the port numbers according to your services' configurations.
 
 ### Step 2: Run docker-compose
 
-With your config.yaml ready, you can now start the Kubectl-Forwarder using docker-compose. This step assumes you have a
-docker-compose.yml file set up for the Kubectl-Forwarder service.
+With your config.yaml ready, you can now start the **kubeway** using docker-compose. This step assumes you have a
+docker-compose.yml file set up for the **kubeway** service.
 Start the services by running:
 
 ```bash
@@ -77,7 +77,7 @@ If you encounter any issues during the setup, ensure that:
 Your KUBECONFIG environment variable in docker-compose.yml correctly points to your Kubernetes config file.
 The config.yaml file accurately reflects your Kubernetes services and namespace.
 Docker and Docker Compose are correctly installed and updated to their latest versions.
-For more detailed troubleshooting, consult the logs of the Docker containers or the output of the Kubectl-Forwarder
+For more detailed troubleshooting, consult the logs of the Docker containers or the output of the **kubeway**
 script.
 
 ## Additional Resources
@@ -90,7 +90,7 @@ additional setup or configuration instructions.
 
 ## Conclusion
 
-With Kubectl-Forwarder, you gain a powerful tool that simplifies the process of developing and testing applications
+With **kubeway**, you gain a powerful tool that simplifies the process of developing and testing applications
 within Kubernetes by providing easy access to your services. Whether you're debugging a local application or integrating
-multiple services, Kubectl-Forwarder streamlines your workflow.
+multiple services, **kubeway** streamlines your workflow.
 

@@ -13,7 +13,7 @@ logging.basicConfig(
 
 
 async def main():
-    logging.info("Starting kubectl-forwarder...")
+    logging.info("Starting kubeway...")
     proxy_server = ProxyServer(config.PROXY_SERVER)
     configuration_service = ConfigurationService(proxy_server)
     configuration_service.write_configuration_file(config.SERVICES)
