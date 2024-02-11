@@ -52,11 +52,7 @@ class Kubectl:
         return output[0]
 
     async def __forward_port(
-        self,
-        namespace: str,
-        pod: str,
-        local_port: int,
-        remote_port: int,
+        self, namespace: str, pod: str, local_port: int, remote_port: int,
     ) -> None:
         command = [
             "kubectl",
