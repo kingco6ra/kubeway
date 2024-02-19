@@ -3,7 +3,7 @@ frontend http_front
     mode http
 
 {% for backend in backends %}
-    use_backend {{ backend.namespace }}-{{ backend.name }}-{{ backend.protocol }} if { path /{{ backend.namespace }}/{{ backend.backend }}/{{ backend.protocol }} } || { path_beg /{{ backend.namespace }}/{{ backend.name }}/{{ backend.protocol }}/ }
+    use_backend {{ backend.namespace }}-{{ backend.name }}-{{ backend.protocol }} if { path /{{ backend.namespace }}/{{ backend.name }}/{{ backend.protocol }} } || { path_beg /{{ backend.namespace }}/{{ backend.name }}/{{ backend.protocol }}/ }
 {% endfor %}
 
 defaults

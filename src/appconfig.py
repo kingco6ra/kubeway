@@ -21,7 +21,6 @@ class AppConfig:
     @classmethod
     def load_from_yaml(cls, file_path: str) -> "AppConfig":
         data = read_yaml_file(file_path)
-        print(data)
         if "SERVICES" in data:
             data["SERVICES"] = [
                 Service.from_dict(service) for service in data["SERVICES"]
